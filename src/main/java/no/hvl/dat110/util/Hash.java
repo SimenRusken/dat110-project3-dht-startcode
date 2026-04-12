@@ -35,9 +35,9 @@ public class Hash {
 	public static BigInteger addressSize() {
 		
 		int bitSize = bitSize();
-		Double value = Math.pow(2, bitSize);
-		BigInteger size = BigDecimal.valueOf(value).toBigInteger();
-		return size;
+		BigInteger value = BigInteger.valueOf(2);
+		BigInteger resultat = value.pow(bitSize);
+		return resultat;
 		
 		
 		
