@@ -6,6 +6,7 @@ package no.hvl.dat110.chordoperations;
 import java.math.BigInteger;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 
@@ -15,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import no.hvl.dat110.middleware.Message;
 import no.hvl.dat110.middleware.Node;
 import no.hvl.dat110.rpc.interfaces.NodeInterface;
+import no.hvl.dat110.util.Hash;
 import no.hvl.dat110.util.Util;
 
 /**
@@ -155,6 +157,23 @@ public class ChordProtocols {
 		
 		try {
 			logger.info("Fixing the FingerTable for the Node: "+ chordnode.getNodeName());
+			
+			List<NodeInterface> fingerTable = chordnode.getFingerTable();
+			fingerTable.clear();
+			BigInteger addressSize = Hash.addressSize();
+			int numberOfBits = Hash.bitSize();
+			BigInteger two = BigInteger.valueOf(2);
+			
+			for (int i = 0; i < numberOfBits; i++) {
+				BigInteger k = chordnode.getNodeID().add(two.pow(i)).mod(two.pow(numberOfBits));
+				NodeInterface node = chordnode.findSuccessor(k);
+				
+				if (node != null) {
+					fingerTable.add(node);
+				}
+				
+			}
+			
 	
 			// get the finger table from the chordnode (list object)
 			
